@@ -8,7 +8,7 @@ export default function PhoneGate({ slug }: { slug: string }) {
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
-  useEffect(() => { setUnlocked(window.localStorage.getItem(`bestai:unlocked:${slug}`) === "yes"); }, [slug]);
+  useEffect(() => { setUnlocked(window.localStorage.getItem("bestai:unlocked") === "yes"); }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -18,7 +18,7 @@ export default function PhoneGate({ slug }: { slug: string }) {
       const response = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phone, slug, consent: true }) });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "We couldn't save your number. Please try again.");
-      window.localStorage.setItem(`bestai:unlocked:${slug}`, "yes");
+      window.localStorage.setItem("bestai:unlocked", "yes");
       setUnlocked(true);
     } catch (error) { setStatus(error instanceof Error ? error.message : "Something went wrong. Please try again."); }
     finally { setBusy(false); }
